@@ -1,34 +1,25 @@
 package main
 
 import (
-	"github.com/urfave/cli"
+	"encoding/json"
 	"fmt"
-	"os"
 )
 
-func main(){
-	app :=cli.NewApp()
+type Server struct {
+	ServerName string
+	ServerIP   string
+}
 
-	app.Name = "hello"
+type Serverslice struct {
+	Sev string
+	Servers []Server
+}
 
-	app.Version = "1.0.0"
-
-	app.Commands = []cli.Command{
-		{
-			Name : "language",
-			Aliases: []string{"lang"},
-			Usage: "change language",
-
-			Action: func(c *cli.Context) error{
-				language := c.Args().First()
-				if language == "chinese"{
-					fmt.Println("language is 中文")
-				}else {
-					fmt.Println("language is english")
-				}
-				return nil
-			},
-		},
+func main() {
+	var s Serverslice
+	str := `{"sev":"dsaads","servers":[{"serverName":"Shanghai_VPN","serverIP":"127.0.0.1"},{"serverName":"Beijing_VPN","serverIP":"127.0.0.2"}]}`
+	json.Unmarshal([]byte(str), &s)
+	for _,v := range s.Servers{
+		fmt.Println(v)
 	}
-	app.Run(os.Args)
 }
